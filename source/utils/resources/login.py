@@ -20,10 +20,7 @@ class LoginResource(object):
     def on_post(self, req, resp):
         response = {}
 
-        try:
-            data = json.loads(req.stream.read())
-        except:
-            data = {}
+        data = json.loads(req.stream.read())
 
         # Check required fields are passed
         required_keys = {'user_id', 'password'}
