@@ -1,0 +1,20 @@
+---
+  db:
+    connection: 'mysql+mysqlconnector://apiuser:apipassword@localhost:3306/apidb'
+  gunicorn:
+    bind: '0.0.0.0:8000'
+    workers: 5
+    timeout: 30
+  api:
+    authentication: True
+    environment: 'Test' # Test, Staging, Prod
+    path_prefix: '/falcon-api'
+    secret_key: 'my_secret_key'
+    jwt_expire_limit: 10 # Minute
+    log_format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  mapdict: # Keys will be replaced with values
+    Amazon: 'Amazon©'
+    Deloitte: 'Deloitte©'
+    Google: 'Google©'
+    Microsoft: 'Microsoft©'
+    Oracle: 'Oracle©'
