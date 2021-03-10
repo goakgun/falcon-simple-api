@@ -25,9 +25,10 @@ class ReplaceResource(object):
         response = {}
 
         # Check jwt token in headers
-        if not 'X-AUTH' in req.headers:
+        print(req.headers)
+        if not 'X-Auth-Token'.upper() in req.headers:
             response['error'] = '1'
-            response['message'] = 'Error: X-AUTH code is mandatory'
+            response['message'] = 'Error: X-Auth-Token is mandatory'
             resp.status = falcon.HTTP_401
         else:
             user_jwt_validation_state, response = self.jwt_manager.validate_jwt_token(req) 

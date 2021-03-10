@@ -5,6 +5,7 @@
 import jwt
 import logging
 import datetime
+import time
 from utils.db import models
 
 
@@ -15,12 +16,15 @@ class JWTManager(object):
         self.secret_key = config.api.secret_key
         self.algorithm = 'HS256'
         self.jwt_expire_limit = config.api.jwt_expire_limit # minutes
-        self.jwt_expire_date = datetime.datetime.utcnow() + datetime.timedelta(minutes=self.jwt_expire_limit) # Set time limit
         return None
 
     def generate_jwt_token(self, user_id):
         jwt_response = {}
-        payload = {"user_id": user_id, "exp":self.jwt_expire_date} # payload
+        jwt_current_date = datetime.datetime.utcnow()
+        jwt_expire_date = jwt_current_date + datetime.timedelta(minutes=self.jwt_expire_limit) # Set time limit
+        jwt_current_unixtime = time.mktime(jwt_current_date.timetuple())
+        jwt_expire_unixtime = time.mktime(jwt_expire_date.timetuple())
+        payload = {"sub": user_id, "iat":jwt_current_date, "exp":jwt_expire_date} # payload
 
         # Generate jwt token
         token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm) 
@@ -28,7 +32,7 @@ class JWTManager(object):
         jwt_response = {
             "error": "0",
             "message": "Succesful",
-            "x-auth": token.decode("UTF-8"),
+            "X-Auth-Token": token.decode("UTF-8"),
             "Elapse_time": f"{self.jwt_expire_limit}"
         }
         return jwt_response
@@ -37,33 +41,33 @@ class JWTManager(object):
         validation = False
         jwt_response = {}
 
-        if 'X-AUTH' in req.headers:
-            token = req.headers['X-AUTH'] # Extract token from request header
+        if 'X-Auth-Token'.upper() in req.headers:
+            token = req.headers['X-Auth-Token'.upper()] # Extract token from request header
             try: 
                 payload = jwt.decode(token, self.secret_key, self.algorithm)
                 validation = True
-                logging.debug(f'X-AUTH code {token} validation is succesfully done')
+                logging.debug(f'X-Auth-Token {token} validation is succesfully done')
             except jwt.exceptions.ExpiredSignatureError:
                 jwt_response = {
                     "error": "1",
-                    "message": "X-AUTH code has expired"
+                    "message": "X-Auth-Token has expired"
                     }
                 validation = False
-                logging.debug(f'X-AUTH code {token} has expired')
+                logging.debug(f'X-Auth-Token {token} has expired')
             except:
                 jwt_response = {
                     "error": "1",
-                    "message": "Invalid X-AUTH code"
+                    "message": "Invalid X-Auth-Token code"
                     }
                 validation = False
-                logging.debug(f'X-AUTH code {token} is invalid')
+                logging.debug(f'X-Auth-Token {token} is invalid')
         else:
             jwt_response = {
                 "error": "1",
-                "message": "X-AUTH code is required"
+                "message": "X-Auth-Token is required"
                 }
             validation = False
-            logging.debug(f'X-AUTH code is required!')
+            logging.debug(f'X-Auth-Token is required!')
 
         return validation, jwt_response
 
