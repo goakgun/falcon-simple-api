@@ -81,6 +81,4 @@ docker_note "Auth jwt expire limit: ${AUTH_JWT_EXPIRE_LIMIT}"
 
 docker_verify_minimum_env
 
-echo "hello world"
-
 exec "$@"
