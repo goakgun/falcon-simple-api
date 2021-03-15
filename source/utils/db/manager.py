@@ -37,7 +37,7 @@ class DBManager(object):
         for user in users:
             hashed_password = sha256_crypt.hash(user['password'])
             user['password'] = hashed_password
-            user_exists = self.DBSession.query(models.Users).filter_by('user_id'=user['user_id'], email=user['email']).first() is not None
+            user_exists = self.DBSession.query(models.Users).filter_by(user_id=user['user_id'], email=user['email']).first() is not None
             if not user_exists:
                 try:
                     self.DBSession.add(models.Users(**user))
