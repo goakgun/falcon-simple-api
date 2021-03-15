@@ -2,7 +2,7 @@
 
 Building a Falcon Rest API using Gunicorn to replace word(s) based on provided dictionary. Functionality of the API is limited. API has these following endpoints:
 
- * /health - Checks if the application is running - Supports GET requests
+ * /health - Checks if the application is running - Supports POST requests
  * /login - Validates username and password to provide token for 'replace' api call. - Supports POST requests
  * /replace - replace user input based on provided word map - Supports POST requests
 
