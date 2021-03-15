@@ -51,7 +51,7 @@ class Users(SAModel):
 
     @classmethod
     def get_user(cls, session, user_id, password):
-        userModel = {}
+        userModel = None
         with session.begin():
             query = session.query(cls)
             userModel = query.filter_by(user_id=user_id, active=True).first()
@@ -63,6 +63,6 @@ class Users(SAModel):
                 logging.error('Invalid login attempt for {user_id}}')
         except:
             logging.error('Invalid login attempt for {user_id}}')
-            userModel = {}
+            userModel = None
 
         return userModel
