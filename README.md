@@ -103,30 +103,30 @@ To Call replace API service we will use jwt token generated before.
 
 # Database Specific Environment Variables
 ```
-$DATABASE_ENGINE (Default:sqlite): Possible values; sqlite, mysql, postgresql
-$DATABASE_HOST: (Default:127.0.0.1)
-$DATABASE: Required (if DATABASE_ENGINE is sqlite then this should be full path of sqlite file without extension(.db))
-$DATABASE_USERNAME: Required if DATABASE_ENGINE is not sqlite
-$DATABASE_PASSWORD: Required if DATABASE_ENGINE is not sqlite
+**$DATABASE_ENGINE** (Default:sqlite): Possible values; sqlite, mysql, postgresql
+**$DATABASE_HOST** (Default:127.0.0.1)
+**$DATABASE** Required (if DATABASE_ENGINE is sqlite then this should be full path of sqlite file without extension(.db))
+**$DATABASE_USERNAME** Required if DATABASE_ENGINE is not sqlite
+**$DATABASE_PASSWORD** Required if DATABASE_ENGINE is not sqlite
 ```
 
 # Gunicorn Specific Environment Variables
 ```
-$GUNICORN_WORKERS (Default:2): The number of worker processes. This number should generally be between 2-4 workers per core in the server.
-$GUNICORN_BIND_PORT (Default:8080)
-$GUNICORN_TIMEOUT (Default:30): Workers silent for more than this many seconds are killed and restarted.
+**$GUNICORN_WORKERS** (Default:2): The number of worker processes. This number should generally be between 2-4 workers per core in the server.
+**$GUNICORN_BIND_PORT** (Default:8080)
+**$GUNICORN_TIMEOUT** (Default:30): Workers silent for more than this many seconds are killed and restarted.
 ```
 
 # App Specific Environment Variables
 ```
-$APP_PATH_PREFIX (Default:/): Root Path which is api will be served
-$APP_ENVIRONMENT (Default:Test): Possible values; Test, Staging, Prod (For now only it affects logging level)
+**$APP_PATH_PREFIX** (Default:/): Root Path which is api will be served
+**$APP_ENVIRONMENT** (Default:Test): Possible values; Test, Staging, Prod (For now only it affects logging level)
 ```
 
 # Auth Specific Environment Variables
 ```
-$AUTH_SECRET_KEY (Default:my-secret-key): This will be used as salt string value in app
-$AUTH_JWT_EXPIRE_LIMIT (Default:30): Number of minutes before generated json expire. you'll have an access token, that's valid for {AUTH_JWT_EXPIRE_LIMIT} minutes
+**$AUTH_SECRET_KEY** (Default:my-secret-key): This will be used as salt string value in app
+**$AUTH_JWT_EXPIRE_LIMIT** (Default:30): Number of minutes before generated json expire. you'll have an access token, that's valid for {AUTH_JWT_EXPIRE_LIMIT} minutes
 ```
 
 [0] requirements.txt
