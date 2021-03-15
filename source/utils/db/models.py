@@ -54,12 +54,15 @@ class Users(SAModel):
         userModel = {}
         with session.begin():
             query = session.query(cls)
-            userModel = query.filter_by(user_id=user_id, active=True).first() is not None
+            userModel = query.filter_by(user_id=user_id, active=True).first()
 
-        # check user if it is exists
-        if userModel:
+        try:
             # check password
             if not sha256_crypt.verify(password, userModel.password):
                 userModel = {}
                 logging.error('Invalid login attempt for {user_id}}')
+        except:
+            logging.error('Invalid login attempt for {user_id}}')
+            userModel = {}
+
         return userModel
