@@ -14,13 +14,28 @@ class LoginResource(object):
     def __init__(self, config, db):
         self.config = config
         self.db = db
-        self.mapDict = self.config.mapdict
+        self.application_map_dictionary = self.config.application_map_dictionary
         self.jwt_manager = JWTManager(config, db)
+
+    def on_get(self, req, resp):
+        response = {}
+
+        response['error'] = '1'
+        response['message'] = '"/login" support POST requests only!'
+        resp.status = falcon.HTTP_400
+        logging.debug(response)
+        resp.body = json.dumps(response, ensure_ascii=False, sort_keys=True, indent=2, separators=(',', ': ')).encode('utf8')
+
+
 
     def on_post(self, req, resp):
         response = {}
 
-        data = json.loads(req.stream.read())
+        try:
+            data = json.loads(req.stream.read())
+        except:
+            logging.error('Invalid login attempt!')
+            data = {}
 
         # Check required fields are passed
         required_keys = {'user_id', 'password'}

@@ -7,8 +7,8 @@ import logging
 from utils.jwt.manager import JWTManager
 
 
-def wordReplace(text, mapDict):
-    result = " ".join(mapDict.get(item, item) for item in text.split())
+def wordReplace(text, application_map_dictionary):
+    result = " ".join(application_map_dictionary.get(item, item) for item in text.split())
     # for key in mapDict:
     #    text = text.replace(key, mapDict[key])
     return result
@@ -17,15 +17,23 @@ def wordReplace(text, mapDict):
 class ReplaceResource(object):
 
     def __init__(self, config, db):
-        logging.debug(f'Map Dictonary: {config.mapdict}')
-        self.mapDict = config.mapdict
+        logging.debug(f'Map Dictonary: {config.application_map_dictionary}')
+        self.application_map_dictionary = config.application_map_dictionary
         self.jwt_manager = JWTManager(config, db)
 
     def on_get(self, req, resp):
         response = {}
 
+        response['error'] = '1'
+        response['message'] = '"/replace" support POST requests only!'
+        resp.status = falcon.HTTP_400
+        logging.debug(response)
+        resp.body = json.dumps(response, ensure_ascii=False, sort_keys=True, indent=2, separators=(',', ': ')).encode('utf8')
+
+    def on_post(self, req, resp):
+        response = {}
+
         # Check jwt token in headers
-        print(req.headers)
         if not 'X-Auth-Token'.upper() in req.headers:
             response['error'] = '1'
             response['message'] = 'Error: X-Auth-Token is mandatory'
@@ -43,7 +51,7 @@ class ReplaceResource(object):
                     resp.status = falcon.HTTP_501
                 else:
                     response['error'] = '0'
-                    response['value'] = wordReplace(data['value'], self.mapDict)
+                    response['value'] = wordReplace(data['value'], self.application_map_dictionary)
                     resp.status = falcon.HTTP_200
         logging.debug(response)
         resp.body = json.dumps(response, ensure_ascii=False, sort_keys=True, indent=2, separators=(',', ': ')).encode('utf8')

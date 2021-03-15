@@ -17,7 +17,7 @@ from utils.http_server.gateway import CustomWorker, GunicornApp # Custom Gunicor
 
 if __name__ == '__main__':
 
-    # read config file
+    # read map config file
     config = aumbry.load(
             aumbry.FILE,
             ConfigManager,
@@ -27,18 +27,19 @@ if __name__ == '__main__':
     )
 
     # Set Log Level and Logging Format
-    LogManager(config.api.environment, config.api.log_format)
+    LogManager(config.api.app_environment, config.api.log_format)
 
     # Initialize Database Connection
     db_manager = DBManager(config.db.connection, config.db.pool_recycle)
-    db_manager.setup()
+    db_manager.setup(config.application_users)
+    # db_manager.create_users(config.application_users)
 
     # Initialize API Service
     api_service = APIServiceManager(config, db_manager)
-    logging.info('Api Service is started with this configuration: %s' % (config.api))
+    logging.info('Api Service has been started successfully.')
 
     # Initialize Gunicorn Http Server Gateway
-    gunicorn_app = GunicornApp(api_service, config.gunicorn)
+    gunicorn_app = GunicornApp(api_service, config.gunicorn.config)
     gunicorn_app.run()
-    logging.info('Gunicorn Http App is started with this configuration: %s' % (config.gunicorn))
+    logging.info('Gunicorn Http App is started successfully.')
 

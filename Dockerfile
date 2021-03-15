@@ -16,7 +16,13 @@ RUN pip install -r /opt/api-app/requirements.txt
 
 COPY source /opt/api-app/source
 
-# Uncomment on test environment / single instance
-# COPY config /opt/api-app/etc
+# Default config file
+COPY config /opt/api-app/etc
 
-ENTRYPOINT ["python", "/opt/api-app/source/run.py"]
+# Docker-Entrypoint
+COPY docker-entrypoint.sh /
+RUN chmod 755 /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["python", "/opt/api-app/source/run.py"]

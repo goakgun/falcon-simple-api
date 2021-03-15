@@ -12,7 +12,7 @@ class APIServiceManager(falcon.API):
     def __init__(self, config, db):
         super(APIServiceManager, self).__init__()
 
-        logging.info('App will be available on %s' % (config.api.path_prefix))
+        logging.info('App will be available on %s' % (config.api.app_path_prefix))
 
         # Health
         health_resource = health.HealthResource(config, db)
@@ -24,9 +24,9 @@ class APIServiceManager(falcon.API):
         replace_resource = replace.ReplaceResource(config, db)
 
         # Build Routes
-        self.add_route(f'{config.api.path_prefix}/health', health_resource)
-        self.add_route(f'{config.api.path_prefix}/login', login_resource)
-        self.add_route(f'{config.api.path_prefix}/replace', replace_resource)
+        self.add_route(f'{config.api.app_path_prefix}health', health_resource)
+        self.add_route(f'{config.api.app_path_prefix}login', login_resource)
+        self.add_route(f'{config.api.app_path_prefix}replace', replace_resource)
 
     def start(self):
         """ A hook to when a Gunicorn worker calls run()."""

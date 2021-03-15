@@ -6,7 +6,6 @@ import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
 from passlib.hash import sha256_crypt
 
-
 SAModel = declarative_base()
 
 class Users(SAModel):
