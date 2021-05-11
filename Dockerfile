@@ -23,6 +23,10 @@ COPY config /opt/api-app/etc
 COPY docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
 
+# Application User
+RUN useradd -ms /bin/bash appuser
+USER appuser
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["python", "/opt/api-app/source/run.py"]
